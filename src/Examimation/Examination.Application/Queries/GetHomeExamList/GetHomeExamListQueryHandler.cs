@@ -1,0 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using Examination.Domain.AggregateModels.ExamAggregate;
+using Examination.Dtos;
+using MediatR;
+using MongoDB.Driver;
+
+namespace Examination.Application.Queries.GetHomeExamList
+{
+  public class GetHomeExamListQueryHandler : IRequestHandler<GetHomeExamListQuery, IEnumerable<ExamDto>>
+  {
+    private readonly IExamRepository _examRepository;
+    private readonly IMapper _mapper;
+    private readonly IClientSessionHandle _clientSessionHandle;
+    public GetHomeExamListQueryHandler(IExamRepository examRepository, IMapper mapper, IClientSessionHandle clientSessionHandle)
+    {
+      _clientSessionHandle = clientSessionHandle ?? throw new ArgumentNullException(nameof(_clientSessionHandle));
+      _mapper = mapper;
+      _examRepository = examRepository ?? throw new ArgumentNullException(nameof(examRepository));
+
+    }
+    public async Task<IEnumerable<ExamDto>> Handle(GetHomeExamListQuery request, CancellationToken cancellationToken)
+    {
+      var exams = await _examRepository.GetExamListAsync();
+      var examDtos = _mapper.Map<IEnumerable<ExamDto>>(exams);
+      return examDtos;
+    }
+  }
+}
