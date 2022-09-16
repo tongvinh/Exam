@@ -1,4 +1,8 @@
 using System.Reflection;
+using Examination.Infrastructure;
+using Examination.Infrastructure.SeedWork;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using Serilog;
 
 namespace Examination.API
@@ -16,6 +20,18 @@ namespace Examination.API
         Log.Information("Starting web host ({ApplicationContext})...", appName);
         var host = CreateHostBuilder(args).Build();
         Log.Information("Apply configuration web host ({ApplicationContext})...", appName);
+        
+        using (var scope = host.Services.CreateScope())
+        {
+          var services = scope.ServiceProvider;
+          var logger = services.GetRequiredService<ILogger<ExamMongoDbSeeding>>();
+          var settings = services.GetRequiredService<IOptions<ExamSettings>>();
+          var mongoClient = services.GetRequiredService<IMongoClient>();
+          new ExamMongoDbSeeding()
+              .SeedAsync(mongoClient, settings, logger)
+              .Wait();
+        }
+
         host.Run();
         Log.Information("Started web host ({ApplicationContext})...", appName);
         return 0;
