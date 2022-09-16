@@ -7,8 +7,8 @@ using MediatR;
 
 namespace Examination.Application.Queries.GetHomeExamList
 {
-    public class GetHomeExamListQuery:IRequest<IEnumerable<ExamDto>>
-    {
-        
-    }
+  public class GetHomeExamListQuery : IRequest<IEnumerable<ExamDto>>
+  {
+
+  }
 }
