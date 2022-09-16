@@ -6,8 +6,13 @@ using Examination.Domain.AggregateModels.UserAggregate;
 using Examination.Infrastructure.Repositories;
 using Examination.Infrastructure.SeedWork;
 using MediatR;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
+using System.Text.Json;
+using System.Net.Mime;
 
 namespace Examination.API
 {
@@ -23,6 +28,13 @@ namespace Examination.API
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+
+      var user = Configuration.GetValue<string>("DatabaseSettings:User");
+      var password = Configuration.GetValue<string>("DatabaseSettings:Password");
+      var server = Configuration.GetValue<string>("DatabaseSettings:Server");
+      var databaseName = Configuration.GetValue<string>("DatabaseSettings:DatabaseName");
+      var mongodbConnectionString = "mongodb://" + user + ":" + password + "@" + server + "/" + databaseName + "?authSource=admin";
+
       services.AddApiVersioning(options =>
       {
         options.ReportApiVersions = true;
@@ -40,14 +52,9 @@ namespace Examination.API
                            });
       services.AddSingleton<IMongoClient>(c =>
       {
-        var user = Configuration.GetValue<string>("DatabaseSettings:User");
-        var password = Configuration.GetValue<string>("DatabaseSettings:Password");
-        var server = Configuration.GetValue<string>("DatabaseSettings:Server");
-        var databaseName = Configuration.GetValue<string>("DatabaseSettings:DatabaseName");
-        return new MongoClient(
-                  "mongodb://" + user + ":" + password + "@" + server + "/" + databaseName + "?authSource=admin"
-              );
+        return new MongoClient(mongodbConnectionString);
       });
+
       services.AddScoped(c => c.GetService<IMongoClient>()?.StartSession());
       services.AddAutoMapper(cfg => { cfg.AddProfile(new MappingProfile()); });
       services.AddMediatR(typeof(StartExamCommandHandler).Assembly);
@@ -67,6 +74,23 @@ namespace Examination.API
         c.SwaggerDoc("v2", new OpenApiInfo { Title = "Examination.API V2", Version = "v2" });
       });
       services.Configure<ExamSettings>(Configuration);
+
+      // Health check
+      services.AddHealthChecks()
+              .AddCheck("self", () => HealthCheckResult.Healthy())
+              .AddMongoDb(mongodbConnectionString: mongodbConnectionString,
+                name: "mongo",
+                failureStatus: HealthStatus.Unhealthy);
+
+      services.AddHealthChecksUI(opt =>
+                    {
+                      opt.SetEvaluationTimeInSeconds(15); //time in seconds between check
+                      opt.MaximumHistoryEntriesPerEndpoint(60); //maximum history of checks
+                      opt.SetApiMaxActiveRequests(1); //api requests concurrency
+
+                      opt.AddHealthCheckEndpoint("Exam API", "/hc"); //map health check api
+                    })
+                    .AddInMemoryStorage();
 
       services.AddTransient<IExamRepository, ExamRepository>();
       services.AddTransient<IExamResultRepository, ExamResultRepository>();
@@ -97,6 +121,31 @@ namespace Examination.API
 
       app.UseEndpoints(endpoints =>
       {
+        endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+        {
+          Predicate = _ => true,
+          ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+        endpoints.MapHealthChecksUI(options => options.UIPath = "/hc-ui");
+        endpoints.MapHealthChecks("/liveness", new HealthCheckOptions()
+        {
+          Predicate = r => r.Name.Contains("seft")
+        });
+        endpoints.MapHealthChecks("/healthcheck-details", new HealthCheckOptions()
+        {
+          ResponseWriter = async (context, report) =>
+          {
+            var result = JsonSerializer.Serialize(
+              new
+              {
+                status = report.Status.ToString(),
+                monitors = report.Entries.Select(e => new { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status) })
+              }
+            );
+            context.Response.ContentType = MediaTypeNames.Application.Json;
+            await context.Response.WriteAsync(result);
+          }
+        });
         endpoints.MapControllers();
       });
     }

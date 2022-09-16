@@ -67,8 +67,8 @@ namespace Identity.API
               webBuilder.ConfigureAppConfiguration(x => x.AddConfiguration(configuration));
               webBuilder.UseStartup<Startup>();
               webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
-              webBuilder.UseSerilog();
             })
+            .UseSerilog()
             .Build();
       Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
       {
