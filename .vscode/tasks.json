@@ -4,37 +4,17 @@
     {
       "label": "build",
       "command": "dotnet",
-      "type": "process",
+      "type": "shell",
       "args": [
         "build",
-        "${workspaceFolder}/src/Examimation/Examination.API/Examination.API.csproj",
         "/property:GenerateFullPaths=true",
+        // Do not generate summary otherwise it leads to duplicate errors in Problems panel
         "/consoleloggerparameters:NoSummary"
       ],
-      "problemMatcher": "$msCompile"
-    },
-    {
-      "label": "publish",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "publish",
-        "${workspaceFolder}/src/Examimation/Examination.API/Examination.API.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
-      "problemMatcher": "$msCompile"
-    },
-    {
-      "label": "watch",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "watch",
-        "run",
-        "--project",
-        "${workspaceFolder}/src/Examimation/Examination.API/Examination.API.csproj"
-      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "silent"
+      },
       "problemMatcher": "$msCompile"
     }
   ]
