@@ -41,8 +41,8 @@ namespace Examination.API
                 options.ReportApiVersions = true;
             });
             services.AddVersionedApiExplorer(
-                                 options =>
-                                 {
+                 options =>
+                     {
                                      // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
                                      // note: the specified format code will format the version as "'v'major[.minor][-status]"
                                      options.GroupNameFormat = "'v'VVV";
@@ -63,10 +63,10 @@ namespace Examination.API
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder => builder
-          .SetIsOriginAllowed((host) => true)
-          .AllowAnyHeader()
-          .AllowAnyMethod()
-          .AllowCredentials());
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
             });
 
             services.AddSwaggerGen(c =>
@@ -84,7 +84,7 @@ namespace Examination.API
                             TokenUrl = new Uri($"{Configuration.GetValue<string>("IdentityUrl")}/connect/token"),
                             Scopes = new Dictionary<string, string>()
                             {
-                                {"full_access", "Full Access"},
+                                {"exam_api", "exam_api"},
                             }
                         }
                     }
@@ -154,9 +154,7 @@ namespace Examination.API
 
             app.UseRouting();
             app.UseCors("CorsPolicy");
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
@@ -172,17 +170,16 @@ namespace Examination.API
                 endpoints.MapHealthChecks("/healthcheck-details", new HealthCheckOptions()
                 {
                     ResponseWriter = async (context, report) =>
-              {
-                  var result = JsonSerializer.Serialize(
-              new
-              {
-                  status = report.Status.ToString(),
-                  monitors = report.Entries.Select(e => new { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status) })
-              }
-            );
-                  context.Response.ContentType = MediaTypeNames.Application.Json;
-                  await context.Response.WriteAsync(result);
-              }
+                {
+                    var result = JsonSerializer.Serialize(
+                new
+                {
+                    status = report.Status.ToString(),
+                    monitors = report.Entries.Select(e => new { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status) })
+                });
+                    context.Response.ContentType = MediaTypeNames.Application.Json;
+                    await context.Response.WriteAsync(result);
+                }
                 });
                 endpoints.MapControllers();
             });
