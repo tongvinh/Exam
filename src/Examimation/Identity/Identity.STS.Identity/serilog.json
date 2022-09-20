@@ -13,14 +13,14 @@
             {
                 "Name": "File",
                 "Args": {
-                    "path": "Log/skoruba_admin.txt",
+                    "path": "Log/identity_sts.txt",
                     "rollingInterval": "Day"
                 }
             },
             {
                 "Name": "MSSqlServer",
                 "Args": {
-                    "connectionString": "Server=(localdb)\\mssqllocaldb;Database=IdentityServer4Admin;Trusted_Connection=True;MultipleActiveResultSets=true",
+                    "connectionString": "",
                     "tableName": "Log",
                     "columnOptionsSection": {
                         "addStandardColumns": [ "LogEvent" ],
