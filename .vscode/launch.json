@@ -8,6 +8,10 @@
     {
       "name": "Run All Apis",
       "configurations": ["Identity.STS.Identity","Exam.API"]
+    },
+    {
+      "name": "Run Admin Apis",
+      "configurations": ["Identity.STS.Identity","Exam.API", "Identity.Admin", "AdminApp"]
     }
   ],
   "configurations": [
@@ -20,9 +24,9 @@
       "request": "launch",
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/src/Examimation/Identity/Identity.STS.Identity/bin/Debug/net6.0/Identity.STS.Identity.dll",
+      "program": "${workspaceFolder}/src/Identity/Identity.STS.Identity/bin/Debug/net6.0/Identity.STS.Identity.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/src/Examimation/Identity/Identity.STS.Identity",
+      "cwd": "${workspaceFolder}/src/Identity/Identity.STS.Identity",
       "stopAtEntry": false,
       // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
       "serverReadyAction": {
@@ -71,9 +75,35 @@
       "request": "launch",
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/src/Examimation/Identity/Identity.Admin/bin/Debug/net6.0/Identity.Admin.dll",
+      "program": "${workspaceFolder}/src/Identity/Identity.Admin/bin/Debug/net6.0/Identity.Admin.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/src/Examimation/Identity/Identity.Admin",
+      "cwd": "${workspaceFolder}/src/Identity/Identity.Admin",
+      "stopAtEntry": false,
+      // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/swagger"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    },
+    {
+      // Use IntelliSense to find out which attributes exist for C# debugging
+      // Use hover for the description of the existing attributes
+      // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+      "name": "AdminApp",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/src/WebApps/AdminApp/bin/Debug/net6.0/AdminApp.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/WebApps/AdminApp",
       "stopAtEntry": false,
       // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
       "serverReadyAction": {

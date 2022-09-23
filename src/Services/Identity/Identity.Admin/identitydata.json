@@ -1,0 +1,33 @@
+﻿{
+  "IdentityData": {
+    "Roles": [
+      {
+        "Name": "Administrator"
+      }
+    ],
+    "Users": [
+      {
+        "Username": "admin",
+        "Password": "Admin@123$",
+        "Email": "vinhtong.dev@gmail.com",
+        "Roles": [
+          "Administrator"
+        ],
+        "Claims": [
+          {
+            "Type": "name",
+            "Value": "admin"
+          },
+          {
+            "Type": "given_name",
+            "Value": "Vinh"
+          },
+          {
+            "Type": "family_name",
+            "Value": "Tong"
+          }
+        ]
+      }
+    ]
+  }
+}
