@@ -5,14 +5,14 @@
         "Name": "roles",
         "Enabled": true,
         "DisplayName": "Roles",
-        "UserClaims": ["role"]
+        "UserClaims": [ "role" ]
       },
       {
         "Name": "openid",
         "Enabled": true,
         "Required": true,
         "DisplayName": "Your user identifier",
-        "UserClaims": ["sub"]
+        "UserClaims": [ "sub" ]
       },
       {
         "Name": "profile",
@@ -42,27 +42,16 @@
         "Enabled": true,
         "DisplayName": "Your email address",
         "Emphasize": true,
-        "UserClaims": ["email", "email_verified"]
+        "UserClaims": [ "email", "email_verified" ]
       },
       {
         "Name": "address",
         "Enabled": true,
         "DisplayName": "Your address",
         "Emphasize": true,
-        "UserClaims": ["address"]
+        "UserClaims": [ "address" ]
       }
     ],
-    "ApiScopes": [
-      {
-          "Name": "exam_api",
-          "DisplayName": "exam_api",
-          "Required": true,
-          "UserClaims": [
-              "role",
-              "name"
-          ]
-      }
-  ],
     "ApiResources": [
       {
         "Name": "exam_api",
@@ -71,17 +60,50 @@
             "Name": "exam_api",
             "DisplayName": "exam_api",
             "Required": true,
-            "UserClaims": ["role", "name"]
+            "UserClaims": [ "role", "name" ]
+          }
+        ]
+      },
+      {
+        "Name": "identity_api",
+        "Scopes": [
+          {
+            "Name": "identity_api",
+            "DisplayName": "identity_api",
+            "Required": true,
+            "UserClaims": [ "role", "name" ]
           }
         ]
       }
     ],
+    "ApiScopes": [
+      {
+        "Name": "exam_api",
+        "DisplayName": "exam_api",
+        "Required": true,
+        "UserClaims": [
+          "role",
+          "name"
+        ]
+      },
+      {
+        "Name": "identity_api",
+        "DisplayName": "identity_api",
+        "Required": true,
+        "UserClaims": [
+          "role",
+          "name"
+        ]
+      }
+
+    ],
+
     "Clients": [
       {
         "ClientId": "identity_admin",
         "ClientName": "Identity Admin",
         "ClientUri": "https://localhost:6003",
-        "AllowedGrantTypes": ["authorization_code"],
+        "AllowedGrantTypes": [ "authorization_code" ],
         "AllowAccessTokensViaBrowser": true,
         "RequirePkce": true,
         "ClientSecrets": [
@@ -89,19 +111,19 @@
             "Value": "secret"
           }
         ],
-        "RedirectUris": ["https://localhost:6003/signin-oidc"],
+        "RedirectUris": [ "https://localhost:6003/signin-oidc" ],
         "FrontChannelLogoutUri": "https://localhost:6003/signout-oidc",
         "PostLogoutRedirectUris": [
           "https://localhost:6003/signout-callback-oidc"
         ],
-        "AllowedCorsOrigins": ["https://localhost:6003"],
-        "AllowedScopes": ["openid", "email", "profile", "roles"]
+        "AllowedCorsOrigins": [ "https://localhost:6003" ],
+        "AllowedScopes": [ "openid", "email", "profile", "roles" ]
       },
       {
         "ClientId": "exam_web_app",
         "ClientName": "Exam Web App Client",
         "ClientUri": "https://localhost:6002",
-        "AllowedGrantTypes": ["authorization_code"],
+        "AllowedGrantTypes": [ "authorization_code" ],
         "AllowAccessTokensViaBrowser": true,
         "RequirePkce": true,
         "ClientSecrets": [
@@ -109,19 +131,19 @@
             "Value": "secret"
           }
         ],
-        "RedirectUris": ["https://localhost:6002/signin-oidc"],
+        "RedirectUris": [ "https://localhost:6002/signin-oidc" ],
         "FrontChannelLogoutUri": "https://localhost:6003/signout-oidc",
         "PostLogoutRedirectUris": [
           "https://localhost:6002/signout-callback-oidc"
         ],
-        "AllowedCorsOrigins": ["https://localhost:6002"],
-        "AllowedScopes": ["openid", "email", "profile", "roles"]
+        "AllowedCorsOrigins": [ "https://localhost:6002" ],
+        "AllowedScopes": [ "openid", "email", "profile", "roles" ]
       },
       {
         "ClientId": "exam_web_admin",
         "ClientName": "Exam Web Admin Client",
         "ClientUri": "https://localhost:6001",
-        "AllowedGrantTypes": ["password"],
+        "AllowedGrantTypes": [ "password" ],
         "AllowAccessTokensViaBrowser": true,
         "AllowOfflineAccess": true,
         "RequirePkce": true,
@@ -130,24 +152,35 @@
             "Value": "secret"
           }
         ],
-        "RedirectUris": ["https://localhost:6001/signin-oidc"],
+        "RedirectUris": [ "https://localhost:6001/signin-oidc" ],
         "FrontChannelLogoutUri": "https://localhost:6001/signout-oidc",
         "PostLogoutRedirectUris": [
           "https://localhost:6001/signout-callback-oidc"
         ],
-        "AllowedCorsOrigins": ["https://localhost:6001"],
-        "AllowedScopes": ["openid", "email", "profile", "roles","offline_access"]
+        "AllowedCorsOrigins": [ "https://localhost:6001" ],
+        "AllowedScopes": [ "openid", "email", "profile", "roles", "offline_access" ]
       },
       {
         "ClientId": "exam_api_swaggerui",
         "ClientName": "Exam API Swagger UI",
-        "AllowedGrantTypes": ["implicit"],
+        "AllowedGrantTypes": [ "implicit" ],
         "AllowAccessTokensViaBrowser": true,
         "RequireClientSecret": false,
         "RequirePkce": true,
-        "RedirectUris": ["https://localhost:5002/swagger/oauth2-redirect.html"],
-        "AllowedScopes": ["exam_api"],
-        "AllowedCorsOrigins": ["https://localhost:5002"]
+        "RedirectUris": [ "https://localhost:5002/swagger/oauth2-redirect.html" ],
+        "AllowedScopes": [ "exam_api" ],
+        "AllowedCorsOrigins": [ "https://localhost:5002" ]
+      },
+      {
+        "ClientId": "identity_api_swaggerui",
+        "ClientName": "Identity API Swagger UI",
+        "AllowedGrantTypes": [ "implicit" ],
+        "AllowAccessTokensViaBrowser": true,
+        "RequireClientSecret": false,
+        "RequirePkce": true,
+        "RedirectUris": [ "https://localhost:5003/swagger/oauth2-redirect.html" ],
+        "AllowedScopes": [ "identity_api" ],
+        "AllowedCorsOrigins": [ "https://localhost:5003" ]
       }
     ]
   }

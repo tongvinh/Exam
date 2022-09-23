@@ -13,20 +13,20 @@
             {
                 "Name": "File",
                 "Args": {
-                    "path": "Log/identity_sts.txt",
+                    "path": "Logs/identity_sts.txt",
                     "rollingInterval": "Day"
                 }
             },
             {
                 "Name": "MSSqlServer",
-                "Args": {
-                    "connectionString": "",
-                    "tableName": "Log",
-                    "columnOptionsSection": {
-                        "addStandardColumns": [ "LogEvent" ],
-                        "removeStandardColumns": [ "Properties" ]
-                    }
+              "Args": {
+                "connectionString": "Server=.;Database=Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
+                "tableName": "Log",
+                "columnOptionsSection": {
+                  "addStandardColumns": [ "LogEvent" ],
+                  "removeStandardColumns": [ "Properties" ]
                 }
+              }
             }
         ]
     }
