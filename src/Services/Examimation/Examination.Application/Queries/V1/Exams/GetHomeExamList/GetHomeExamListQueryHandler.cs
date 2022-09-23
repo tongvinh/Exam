@@ -1,7 +1,6 @@
 using AutoMapper;
-using Examination.Application.Queries.GetHomeExamList;
 using Examination.Domain.AggregateModels.ExamAggregate;
-using Examination.Dtos.Exams;
+using Examination.Shared.Exams;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;

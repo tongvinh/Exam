@@ -3,8 +3,8 @@ using Examination.Application.Mapping;
 using Examination.Domain.AggregateModels.ExamAggregate;
 using Examination.Domain.AggregateModels.ExamResultAggregate;
 using Examination.Domain.AggregateModels.UserAggregate;
-using Examination.Infrastructure.Repositories;
-using Examination.Infrastructure.SeedWork;
+using Examination.Infrastructure.MongoDb.Repositories;
+using Examination.Infrastructure.MongoDb.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
@@ -45,14 +45,14 @@ namespace Examination.API
             services.AddVersionedApiExplorer(
                  options =>
                      {
-                                     // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
-                                     // note: the specified format code will format the version as "'v'major[.minor][-status]"
-                                     options.GroupNameFormat = "'v'VVV";
+                         // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+                         // note: the specified format code will format the version as "'v'major[.minor][-status]"
+                         options.GroupNameFormat = "'v'VVV";
 
-                                     // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
-                                     // can also be used to control the format of the API version in route templates
-                                     options.SubstituteApiVersionInUrl = true;
-                                 });
+                         // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+                         // can also be used to control the format of the API version in route templates
+                         options.SubstituteApiVersionInUrl = true;
+                     });
             services.AddSingleton<IMongoClient>(c =>
             {
                 return new MongoClient(mongodbConnectionString);
@@ -75,7 +75,7 @@ namespace Examination.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Examination.API", Version = "v1" });
                 c.SwaggerDoc("v2", new OpenApiInfo { Title = "Examination.API V2", Version = "v2" });
-                
+
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
@@ -134,10 +134,7 @@ namespace Examination.API
                           })
                           .AddInMemoryStorage();
 
-            services.AddTransient<IExamRepository, ExamRepository>();
-            services.AddTransient<IExamResultRepository, ExamResultRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
+          services.RegisterCustomServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -156,7 +153,7 @@ namespace Examination.API
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseRouting();
             app.UseCors("CorsPolicy");
             app.UseAuthorization();
@@ -172,7 +169,7 @@ namespace Examination.API
                 {
                     Predicate = r => r.Name.Contains("seft")
                 });
-                endpoints.MapHealthChecks("/healthcheck-details", new HealthCheckOptions()
+                endpoints.MapHealthChecks("/hc-details", new HealthCheckOptions()
                 {
                     ResponseWriter = async (context, report) =>
                 {

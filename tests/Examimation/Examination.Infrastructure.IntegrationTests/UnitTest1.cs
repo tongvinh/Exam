@@ -1,4 +1,4 @@
-namespace Examination.Infrastructure.IntegrationTests;
+namespace Examination.Infrastructure.MongoDb.IntegrationTests;
 
 public class UnitTest1
 {

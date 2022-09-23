@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Examination.Application.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Examination.Domain.UnitTests", "tests\Examimation\Examination.Domain.UnitTests\Examination.Domain.UnitTests.csproj", "{58A0061B-3AF4-4C9C-901F-8A9794330B8D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Examination.Infrastructure.IntegrationTests", "tests\Examimation\Examination.Infrastructure.IntegrationTests\Examination.Infrastructure.IntegrationTests.csproj", "{4647FA9A-519A-4632-8750-882AF3C4300F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Examination.Infrastructure.MongoDb.IntegrationTests", "tests\Examimation\Examination.Infrastructure.MongoDb.IntegrationTests\Examination.Infrastructure.MongoDb.IntegrationTests.csproj", "{4647FA9A-519A-4632-8750-882AF3C4300F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{B8C00F4C-C82B-4BD9-985F-ED61E94C2857}"
 EndProject

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Examination.Dtos.Categories
+namespace Examination.Shared.Categories
 {
     public class CreateCategoryRequest
     {
