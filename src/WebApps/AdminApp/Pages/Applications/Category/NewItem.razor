@@ -43,6 +43,7 @@
 
     private async Task OnValidSubmit(EditContext context)
     {
+        
         loading = true;
         success = await CategoryService.CreateAsync(model);
         if (success)

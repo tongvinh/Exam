@@ -14,8 +14,10 @@ builder.RootComponents.Add<App>("#app");
 builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+
+builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 
 builder.Services.AddScoped(sp => new HttpClient
 {

@@ -28,6 +28,21 @@ namespace Examination.Domain.AggregateModels.ExamAggregate
               ownerUserId,
               numberOfQuestionCorrectForPass, isTimeRestricted);
     }
+
+    public Exam(string name, string shortDesc, string content, int numberOfQuestions, Level level, DateTime dateCreated,
+      string ownerUserId, int numberOfQuestionCorrectForPass, bool isTimeRestricted)
+    {
+      Name = name;
+      ShortDesc = shortDesc;
+      Content = content;
+      NumberOfQuestions = numberOfQuestions;
+      Level = level;
+      DateCreated = dateCreated;
+      OwnerUserId = ownerUserId;
+      NumberOfQuestionCorrectForPass = numberOfQuestionCorrectForPass;
+      IsTimeRestricted = isTimeRestricted;
+    }
+
     [BsonElement("name")]
     public string Name { get; set; }
 

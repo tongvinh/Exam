@@ -8,7 +8,7 @@ using MongoDB.Driver;
 
 namespace Examination.Application.Queries.V1.Categories.GetCategoriesPaging
 {
-    internal class GetCategoriesPagingQueryHandler : IRequestHandler<GetCategoriesPagingQuery, PagedList<CategoryDto>>
+    internal class GetCategoriesPagingQueryHandler : IRequestHandler<GetCategoriesPagingQuery, ApiResult<PagedList<CategoryDto>>>
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
@@ -21,22 +21,23 @@ namespace Examination.Application.Queries.V1.Categories.GetCategoriesPaging
             ILogger<GetCategoriesPagingQueryHandler> logger,
             IClientSessionHandle clientSessionHandle)
         {
-            _categoryRepository = categoryRepository?? throw new ArgumentNullException(nameof(categoryRepository));
+            _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             _mapper = mapper;
             _logger = logger;
             _clientSessionHandle = clientSessionHandle ?? throw new ArgumentNullException(nameof(clientSessionHandle));
         }
-        public async Task<PagedList<CategoryDto>> Handle(GetCategoriesPagingQuery request, CancellationToken cancellationToken)
+        public async Task<ApiResult<PagedList<CategoryDto>>> Handle(GetCategoriesPagingQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("BEGIN: GetHomeExamListQueryHandler");
 
             var result =
                 await _categoryRepository.GetCategoriesPagingAsync(request.SearchKeyWord, request.PageIndex,
                     request.PageSize);
-            var items = _mapper.Map<List<CategoryDto>>(result.Item1);
+            var items = _mapper.Map<List<CategoryDto>>(result.Items);
 
             _logger.LogInformation("END: GetHomeExamListQueryHandler");
-            return new PagedList<CategoryDto>(items, result.Item2, request.PageIndex, request.PageSize);
+            var pagedResult = new PagedList<CategoryDto>(items, result.MetaData.TotalCount, request.PageIndex, request.PageSize);
+            return new ApiSuccessResult<PagedList<CategoryDto>>(pagedResult);
         }
     }
 }

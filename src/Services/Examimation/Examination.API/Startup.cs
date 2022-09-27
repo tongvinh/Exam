@@ -16,6 +16,7 @@ using System.Net.Mime;
 using Examination.API.Filters;
 using Examination.Application.Commands.V1.Exams.StartExam;
 using Examination.Domain.AggregateModels.CategoryAggregate;
+using Examination.API.Extensions;
 
 namespace Examination.API
 {
@@ -37,6 +38,8 @@ namespace Examination.API
             var server = Configuration.GetValue<string>("DatabaseSettings:Server");
             var databaseName = Configuration.GetValue<string>("DatabaseSettings:DatabaseName");
             var mongodbConnectionString = "mongodb://" + user + ":" + password + "@" + server + "/" + databaseName + "?authSource=admin";
+
+            services.AddHttpContextAccessor();
 
             services.AddApiVersioning(options =>
             {
@@ -152,6 +155,7 @@ namespace Examination.API
 
             }
 
+            app.UseErrorWrapping();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseRouting();

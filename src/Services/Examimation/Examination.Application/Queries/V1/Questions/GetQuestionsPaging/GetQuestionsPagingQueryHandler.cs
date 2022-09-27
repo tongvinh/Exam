@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Examination.Domain.AggregateModels.QuestionAggregate;
 using Examination.Shared.Questions;
 using Examination.Shared.SeedWork;
@@ -13,7 +8,7 @@ using MongoDB.Driver;
 
 namespace Examination.Application.Queries.V1.Questions.GetQuestionsPaging
 {
-    public class GetQuestionsPagingQueryHandler : IRequestHandler<GetQuestionsPagingQuery, PagedList<QuestionDto>>
+    public class GetQuestionsPagingQueryHandler : IRequestHandler<GetQuestionsPagingQuery, ApiResult<PagedList<QuestionDto>>>
     {
         private readonly IQuestionRepository _QuestionRepository;
         private readonly IClientSessionHandle _clientSessionHandle;
@@ -34,17 +29,23 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionsPaging
 
         }
 
-        public async Task<PagedList<QuestionDto>> Handle(GetQuestionsPagingQuery request, CancellationToken cancellationToken)
+        public async Task<ApiResult<PagedList<QuestionDto>>> Handle(GetQuestionsPagingQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("BEGIN: GetHomeExamListQueryHandler");
 
             var result =
-                await _QuestionRepository.GetQuestionsPagingAsync(request.SearchKeyword, request.PageIndex,
+                await _QuestionRepository.GetQuestionsPagingAsync(
+                    request.CategoryId,
+                    request.
+                        SearchKeyword,
+                    request.PageIndex,
                     request.PageSize);
-            var items = _mapper.Map<List<QuestionDto>>(result.Item1);
+            var items = _mapper.Map<List<QuestionDto>>(result.Items);
 
             _logger.LogInformation("END: GetHomeExamListQueryHandler");
-            return new PagedList<QuestionDto>(items, result.Item2, request.PageIndex, request.PageSize);
+            var pagedItems = new PagedList<QuestionDto>(items, result.MetaData.TotalCount, request.PageIndex, request.PageSize);
+
+            return new ApiSuccessResult<PagedList<QuestionDto>>(pagedItems);
         }
     }
 }

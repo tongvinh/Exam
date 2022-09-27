@@ -14,7 +14,8 @@ namespace Examination.Infrastructure.MongoDb
 {
     public class ExamMongoDbSeeding
     {
-        public async Task SeedAsync(IMongoClient mongoClient, IOptions<ExamSettings> settings, ILogger<ExamMongoDbSeeding> logger)
+        public async Task SeedAsync(IMongoClient mongoClient, IOptions<ExamSettings> settings,
+               ILogger<ExamMongoDbSeeding> logger)
         {
             var policy = CreatePolicy(logger, nameof(ExamMongoDbSeeding));
             await policy.ExecuteAsync(async () =>
@@ -28,28 +29,29 @@ namespace Examination.Infrastructure.MongoDb
                 if (await database.GetCollection<Category>(Constants.Collections.Category).EstimatedDocumentCountAsync() == 0)
                 {
                     await database.GetCollection<Category>(Constants.Collections.Category)
-                  .InsertManyAsync(new List<Category>()
-                    {
+                        .InsertManyAsync(new List<Category>()
+                        {
                             new Category(categoryId1,"Category 1","category-1"),
                             new Category(categoryId2,"Category 2","category-1"),
                             new Category(categoryId3,"Category 3","category-3"),
                             new Category(categoryId4,"Category 4","category-4"),
-                    });
+                        });
                 }
                 if (await database.GetCollection<Question>(Constants.Collections.Question).EstimatedDocumentCountAsync() ==
-              0)
+                    0)
                 {
                     await database.GetCollection<Question>(Constants.Collections.Question)
-                  .InsertManyAsync(GetPredefinedQuestions(categoryId1));
+                        .InsertManyAsync(GetPredefinedQuestions(categoryId1));
                 }
                 if (await database.GetCollection<Exam>(Constants.Collections.Exam).EstimatedDocumentCountAsync() ==
-              0)
+                    0)
                 {
                     await database.GetCollection<Exam>(Constants.Collections.Exam)
-                  .InsertManyAsync(GetPredefinedExams(categoryId1));
+                        .InsertManyAsync(GetPredefinedExams(categoryId1));
                 }
             });
         }
+
         private List<Exam> GetPredefinedExams(string categoryId1)
         {
             return new List<Exam>()
@@ -175,12 +177,13 @@ namespace Examination.Infrastructure.MongoDb
             return Policy.Handle<MongoException>().
                 WaitAndRetryAsync(
                     retryCount: retries,
-                    sleepDurationProvider: retries => TimeSpan.FromSeconds(5),
+                    sleepDurationProvider: retry => TimeSpan.FromSeconds(5),
                     onRetry: (exception, timeSpan, retry, ctx) =>
                     {
                         logger.LogWarning(exception, "[{prefix}] Exception {ExceptionType} with message {Message} detected on attempt {retry} of {retries}", prefix, exception.GetType().Name, exception.Message, retry, retries);
                     }
                 );
         }
+
     }
 }

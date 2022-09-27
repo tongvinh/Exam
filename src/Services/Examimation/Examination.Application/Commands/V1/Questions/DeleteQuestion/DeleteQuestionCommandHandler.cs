@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Examination.Domain.AggregateModels.QuestionAggregate;
+using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Examination.Application.Commands.V1.Questions.DeleteQuestion
 {
-    public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionCommand, bool>
+    public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionCommand, ApiResult<bool>>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly ILogger<DeleteQuestionCommandHandler> _logger;
@@ -23,25 +24,19 @@ namespace Examination.Application.Commands.V1.Questions.DeleteQuestion
             _logger = logger;
 
         }
-        public async Task<bool> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResult<bool>> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
         {
             var itemToUpdate = await _questionRepository.GetQuestionsByIdAsync(request.Id);
             if (itemToUpdate == null)
             {
                 _logger.LogError($"Item is not found {request.Id}");
-                return false;
+                return new ApiErrorResult<bool>($"Item is not found {request.Id}");
             }
 
-            try
-            {
-                await _questionRepository.DeleteAsync(request.Id);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                throw;
-            }
+
+            await _questionRepository.DeleteAsync(request.Id);
+            return new ApiSuccessResult<bool>(true, "Delete successful");
+
         }
     }
 }

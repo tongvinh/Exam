@@ -1,0 +1,10 @@
+2022-09-27 11:02:10.433 +07:00 [ERR] Login from Resource Owner Password is success
+2022-09-27 11:02:10.492 +07:00 [ERR] Login from Resource Owner Password is failed
+2022-09-27 11:07:22.298 +07:00 [ERR] Login from Resource Owner Password is success
+2022-09-27 11:07:22.362 +07:00 [ERR] Login from Resource Owner Password is failed
+2022-09-27 11:15:57.740 +07:00 [ERR] Login from Resource Owner Password is success
+2022-09-27 11:15:57.835 +07:00 [ERR] Login from Resource Owner Password is failed
+2022-09-27 11:21:08.154 +07:00 [ERR] Login from Resource Owner Password is success
+2022-09-27 11:21:08.206 +07:00 [ERR] Login from Resource Owner Password is failed
+2022-09-27 11:34:02.207 +07:00 [ERR] Login from Resource Owner Password is success
+2022-09-27 11:34:02.253 +07:00 [ERR] Login from Resource Owner Password is failed

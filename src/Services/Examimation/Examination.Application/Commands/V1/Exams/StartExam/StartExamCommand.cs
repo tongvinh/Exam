@@ -1,8 +1,9 @@
+using Examination.Shared.SeedWork;
 using MediatR;
 
 namespace Examination.Application.Commands.V1.Exams.StartExam
 {
-    public class StartExamCommand : IRequest<bool>
+    public class StartExamCommand : IRequest<ApiResult<bool>>
     {
         public string UserId { get; set; }
         public string FirstName { get; set; }
