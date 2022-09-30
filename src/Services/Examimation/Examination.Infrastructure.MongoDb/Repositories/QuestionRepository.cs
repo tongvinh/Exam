@@ -1,5 +1,6 @@
 using Examination.Domain.AggregateModels.QuestionAggregate;
 using Examination.Infrastructure.MongoDb.SeedWork;
+using Examination.Shared.Enums;
 using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -20,7 +21,7 @@ namespace Examination.Infrastructure.MongoDb.Repositories
             return await Collection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<PagedList<Question>> GetQuestionsPagingAsync(string categoryId,string searchKeyword, int pageIndex, int pageSize)
+        public async Task<PagedList<Question>> GetQuestionsPagingAsync(string categoryId, string searchKeyword, int pageIndex, int pageSize)
         {
             FilterDefinition<Question> filter = Builders<Question>.Filter.Empty;
             if (!string.IsNullOrEmpty(searchKeyword))
@@ -36,7 +37,16 @@ namespace Examination.Infrastructure.MongoDb.Repositories
                 .Limit(pageSize)
                 .ToListAsync();
 
-            return new PagedList<Question>(items, totalRow,pageIndex,pageSize);
+            return new PagedList<Question>(items, totalRow, pageIndex, pageSize);
+        }
+
+        public async Task<List<Question>> GetRandomQuestionsFromExamAsync(string categoryId, Level level, int numberOfQuestions)
+        {
+            var filter = Builders<Question>.Filter.Where(s => s.CategoryId == categoryId && s.Level == level);
+            var items = await Collection.Find(filter)
+            .Limit(numberOfQuestions)
+            .ToListAsync();
+            return items;
         }
     }
 }

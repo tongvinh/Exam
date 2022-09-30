@@ -1,0 +1,2 @@
+2022-09-30 09:46:03.956 +07:00 [ERR] Login from Resource Owner Password is success
+2022-09-30 09:46:04.004 +07:00 [ERR] Login from Resource Owner Password is failed

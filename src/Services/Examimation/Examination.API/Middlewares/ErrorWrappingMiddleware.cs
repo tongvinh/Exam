@@ -33,7 +33,7 @@ namespace Examination.API.Middlewares
             if (!context.Response.HasStarted && context.Response.StatusCode != 204)
             {
                 context.Response.ContentType = "application/json";
-                var response = new ApiErrorResult<bool>(errorMsg);
+                var response = new ApiErrorResult<bool>(500,errorMsg);
                 var json = JsonSerializer.Serialize(response);
                 await context.Response.WriteAsync(json);
             }

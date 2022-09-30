@@ -1,5 +1,5 @@
 
-using Examination.Application.Queries.V1.Exams.GetHomeExamList;
+using Examination.Application.Queries.V1.Exams.GetAllExams;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +18,7 @@ namespace Examination.API.Controllers.V2
     [HttpGet]
     public async Task<IActionResult> GetExamList(string sample)
     {
-      var query = new GetHomeExamListQuery();
+      var query = new GetAllExamsQuery();
       var queryResult = await _mediator.Send(query);
       return Ok(queryResult);
     }
