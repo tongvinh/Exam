@@ -35,9 +35,8 @@ namespace Identity.STS.Identity.Services
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>()
             {
-                new Claim("role", string.Join(";", roles)),
-                new Claim("username", user.UserName),
-                new Claim("email", user.Email),
+               new Claim(ClaimTypes.Role, string.Join(";", roles)),
+               new Claim(ClaimTypes.Email, user.Email)
             };
             claims.AddRange(claimsFromDb);
             context.IssuedClaims = claims;

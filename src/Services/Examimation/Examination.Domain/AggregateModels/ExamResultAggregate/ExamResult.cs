@@ -8,11 +8,18 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
   {
     public ExamResult(string userId, string examId) =>
         (UserId, ExamId, ExamStartDate, Finished) = (userId, examId, DateTime.Now, false);
- [BsonElement("examId")]
+        [BsonElement("examId")]
         public string ExamId { get; set; }
+
+        [BsonElement("examTitle")]
+        public string ExamTitle { get; set; }
 
         [BsonElement("userId")]
         public string UserId { set; get; }
+        [BsonElement("email")]
+        public string Email { get; set; }
+        [BsonElement("fullName")]
+        public string FullName { get; set; }
 
         [BsonElement("questionResults")]
         public List<QuestionResult> QuestionResults { get; set; }

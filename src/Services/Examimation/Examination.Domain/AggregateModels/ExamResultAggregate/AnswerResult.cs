@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Examination.Domain.SeedWork;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -12,11 +8,12 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
     public AnswerResult()
     {
     }
-    public AnswerResult(string id, string content, bool? userChosen)
+    public AnswerResult(string id, string content, bool? userChosen, bool isCorrect)
     {
       Id = id;
       UserChosen = userChosen;
       Content = content;
+      IsCorrect = isCorrect;
     }
 
     [BsonElement("content")]
@@ -24,5 +21,8 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
 
     [BsonElement("userChosen")]
     public bool? UserChosen { get; set; }
+
+    [BsonElement]
+    public bool IsCorrect { get; set; }
   }
 }

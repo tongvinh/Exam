@@ -31,6 +31,7 @@ namespace Examination.Application.Commands.V1.ExamResults.StartExam
       var exam = await _examRepository.GetExamByIdAsync(request.ExamId);
       var examResult = new ExamResult(_httpContextAccessor.GetUserId(), request.ExamId);
       examResult.ExamFinishDate = DateTime.UtcNow;
+      examResult.ExamTitle = exam.Name;
       if (exam.IsTimeRestricted)
       {
         var durations = exam.Duration.Split(":");
@@ -44,7 +45,7 @@ namespace Examination.Application.Commands.V1.ExamResults.StartExam
         x.Content,
         x.QuestionType,
         x.Level,
-        x.Answers.Select(a => new AnswerResult(a.Id, a.Content, null)).ToList(),
+        x.Answers.Select(a => new AnswerResult(a.Id, a.Content, null, a.IsCorrect)).ToList(),
         x.Explain,
         null)).ToList();
       examResult.Finished = false;
